@@ -32,6 +32,7 @@
 | *(screenshot)* | *(screenshot)* | *(screenshot)* |
 
 ---
+##🔗 *Live Demo:* [Click here to try the app](https://smart-sales-forecasting-shhyafzqhxfmzakr8hg4qn.streamlit.app/)
 
 ## 🏗️ System Architecture
 
@@ -295,5 +296,3 @@ MIT License — free to use for portfolio and learning purposes.
 
 > ⭐ If this project helped you, please give it a star!
 
-
-🔗 *Live Demo:* [Click here to try the app](https://smart-sales-forecasting-shhyafzqhxfmzakr8hg4qn.streamlit.app/)
