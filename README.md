@@ -1,4 +1,19 @@
-# 🚀 Smart Sales Forecasting & Auto-Reporting System
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+
+
+
+
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+
+
+
+
+![ML](https://img.shields.io/badge/ML-Scikit--learn-orange)
+
+
+
+
+![Status](https://img.shields.io/badge/Status-Live-brightgreen)# 🚀 Smart Sales Forecasting & Auto-Reporting System
 ### AI-Powered Analytics | Python | Machine Learning | Streamlit
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://python.org)
