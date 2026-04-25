@@ -1,0 +1,539 @@
+import { useState, useEffect, useRef } from "react";
+import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine } from "recharts";
+
+// ── Data ────────────────────────────────────────────────
+const monthlyRevenue = [
+  { month: "Jan", revenue: 98420, units: 550, target: 90000 },
+  { month: "Feb", revenue: 112340, units: 630, target: 95000 },
+  { month: "Mar", revenue: 124880, units: 720, target: 100000 },
+  { month: "Apr", revenue: 138950, units: 810, target: 110000 },
+  { month: "May", revenue: 151200, units: 880, target: 120000 },
+  { month: "Jun", revenue: 163740, units: 960, target: 130000 },
+  { month: "Jul", revenue: 172100, units: 1020, target: 140000 },
+  { month: "Aug", revenue: 185600, units: 1100, target: 150000 },
+  { month: "Sep", revenue: 194300, units: 1160, target: 160000 },
+  { month: "Oct", revenue: 208750, units: 1240, target: 170000 },
+  { month: "Nov", revenue: 219800, units: 1310, target: 180000 },
+  { month: "Dec", revenue: 238540, units: 1420, target: 190000 },
+];
+
+const forecastData = [
+  { month: "Jan '24", actual: 238540, forecast: null, upper: null, lower: null },
+  { month: "Feb '24", actual: null, forecast: 248200, upper: 267900, lower: 228500 },
+  { month: "Mar '24", actual: null, forecast: 261500, upper: 282400, lower: 240600 },
+  { month: "Apr '24", actual: null, forecast: 278800, upper: 301100, lower: 256500 },
+];
+
+const productData = [
+  { name: "ProSuite X", revenue: 412000, units: 1240, color: "#60a5fa" },
+  { name: "CloudStore Pro", revenue: 287000, units: 1560, color: "#34d399" },
+  { name: "SecurityShield", revenue: 241000, units: 720, color: "#fbbf24" },
+  { name: "DataPack Basic", revenue: 168000, units: 3840, color: "#f87171" },
+];
+
+const regionData = [
+  { name: "North", value: 312000, color: "#60a5fa" },
+  { name: "West",  value: 298000, color: "#34d399" },
+  { name: "South", value: 274000, color: "#fbbf24" },
+  { name: "East",  value: 224000, color: "#f87171" },
+];
+
+const salespeople = [
+  { name: "Alice Johnson", revenue: 298000, deals: 42, quota: 280000, trend: "+6.4%" },
+  { name: "Dan Lee",       revenue: 276000, deals: 38, quota: 260000, trend: "+5.7%" },
+  { name: "Bob Martinez",  revenue: 241000, deals: 35, quota: 250000, trend: "-3.6%" },
+  { name: "Carol White",   revenue: 218000, deals: 31, quota: 220000, trend: "-0.9%" },
+  { name: "Eve Chen",      revenue: 196000, deals: 28, quota: 190000, trend: "+3.2%" },
+  { name: "Frank Davis",   revenue: 179000, deals: 26, quota: 180000, trend: "-0.6%" },
+];
+
+// ── Mini sparkline ───────────────────────────────────────
+const Spark = ({ data, color }) => (
+  <svg width="80" height="30" viewBox="0 0 80 30">
+    <polyline
+      points={data.map((v, i) => `${(i / (data.length - 1)) * 80},${30 - (v / Math.max(...data)) * 28}`).join(" ")}
+      fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// ── Animated number ──────────────────────────────────────
+const AnimNum = ({ target, prefix = "$", suffix = "" }) => {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = target / 50;
+    const t = setInterval(() => {
+      start += step;
+      if (start >= target) { setVal(target); clearInterval(t); }
+      else setVal(Math.floor(start));
+    }, 20);
+    return () => clearInterval(t);
+  }, [target]);
+  return <>{prefix}{val.toLocaleString()}{suffix}</>;
+};
+
+// ── Custom tooltip ───────────────────────────────────────
+const CustomTooltip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 8, padding: "10px 14px" }}>
+      <p style={{ color: "#94a3b8", margin: "0 0 6px", fontSize: 12, fontFamily: "Courier Prime, monospace" }}>{label}</p>
+      {payload.map((p, i) => (
+        <p key={i} style={{ color: p.color, margin: "2px 0", fontSize: 13, fontWeight: 600 }}>
+          {p.name}: {typeof p.value === "number" && p.name.toLowerCase().includes("unit") ? p.value.toLocaleString() : `$${p.value?.toLocaleString()}`}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+// ════════════════════════════════════════════════════════
+//  Main Dashboard
+// ════════════════════════════════════════════════════════
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [hoveredSP, setHoveredSP] = useState(null);
+  const [pulseKPI, setPulseKPI] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setPulseKPI(true), 300);
+  }, []);
+
+  const tabs = [
+    { id: "overview",    label: "Overview",    icon: "◉" },
+    { id: "forecast",    label: "AI Forecast", icon: "⬡" },
+    { id: "products",    label: "Products",    icon: "▣" },
+    { id: "team",        label: "Sales Team",  icon: "◈" },
+  ];
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: "#050a14",
+      fontFamily: "'Courier Prime', 'DM Mono', monospace",
+      color: "#e2e8f0", padding: "0",
+      backgroundImage: `radial-gradient(ellipse at 10% 20%, rgba(37,99,235,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 90% 80%, rgba(16,185,129,0.06) 0%, transparent 50%)`,
+    }}>
+
+      {/* ── Header ── */}
+      <header style={{
+        borderBottom: "1px solid #0f172a",
+        background: "rgba(5,10,20,0.95)",
+        backdropFilter: "blur(20px)",
+        padding: "0 32px",
+        position: "sticky", top: 0, zIndex: 100,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        height: 60,
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "linear-gradient(135deg, #1d4ed8, #0ea5e9)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 16,
+          }}>📈</div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: 2, color: "#f1f5f9" }}>
+              SALES INTELLIGENCE
+            </div>
+            <div style={{ fontSize: 9, color: "#475569", letterSpacing: 3 }}>
+              AI-POWERED FORECASTING SYSTEM
+            </div>
+          </div>
+        </div>
+
+        <nav style={{ display: "flex", gap: 4 }}>
+          {tabs.map(tab => (
+            <button key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                background: activeTab === tab.id ? "rgba(37,99,235,0.2)" : "transparent",
+                border: activeTab === tab.id ? "1px solid rgba(37,99,235,0.5)" : "1px solid transparent",
+                color: activeTab === tab.id ? "#60a5fa" : "#64748b",
+                borderRadius: 6, padding: "6px 14px",
+                cursor: "pointer", fontSize: 11,
+                letterSpacing: 1.5, fontFamily: "inherit",
+                transition: "all 0.2s",
+              }}>
+              {tab.icon} {tab.label.toUpperCase()}
+            </button>
+          ))}
+        </nav>
+
+        <div style={{ fontSize: 11, color: "#475569", letterSpacing: 1 }}>
+          <span style={{ color: "#34d399" }}>●</span> LIVE  ·  FY 2023
+        </div>
+      </header>
+
+      <div style={{ padding: "28px 32px", maxWidth: 1400, margin: "0 auto" }}>
+
+        {/* ── KPI Row ── */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12,
+          marginBottom: 28,
+          opacity: pulseKPI ? 1 : 0,
+          transform: pulseKPI ? "translateY(0)" : "translateY(12px)",
+          transition: "all 0.5s ease",
+        }}>
+          {[
+            { label: "TOTAL REVENUE",  val: 2108000, prefix: "$", suffix: "",  delta: "+18.4%", dColor: "#34d399", spark: [52,68,72,89,95,108,115,126,138,148,162,179] },
+            { label: "TOTAL UNITS",    val: 12780,   prefix: "",  suffix: "",  delta: "+22.1%", dColor: "#34d399", spark: [28,35,38,45,49,55,58,64,68,74,79,86] },
+            { label: "AVG DEAL SIZE",  val: 4210,    prefix: "$", suffix: "",  delta: "-2.3%",  dColor: "#f87171", spark: [42,45,43,46,48,44,47,50,52,49,53,51] },
+            { label: "WIN RATE",       val: 68,      prefix: "",  suffix: "%", delta: "+4.2%",  dColor: "#34d399", spark: [58,60,62,61,63,65,64,66,67,68,69,68] },
+            { label: "TRANSACTIONS",   val: 501,     prefix: "",  suffix: "",  delta: "+31.0%", dColor: "#34d399", spark: [30,36,40,45,50,55,59,65,70,76,82,91] },
+          ].map((kpi, i) => (
+            <div key={i} style={{
+              background: "linear-gradient(160deg, #0f172a 0%, #0c1525 100%)",
+              border: "1px solid #1e293b",
+              borderRadius: 10, padding: "18px 20px",
+              position: "relative", overflow: "hidden",
+              transition: "border-color 0.2s",
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "#2563eb50"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "#1e293b"}
+            >
+              <div style={{
+                position: "absolute", bottom: 8, right: 8, opacity: 0.4,
+              }}>
+                <Spark data={kpi.spark} color={kpi.dColor} />
+              </div>
+              <div style={{ fontSize: 9, letterSpacing: 3, color: "#475569", marginBottom: 8 }}>
+                {kpi.label}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: "#f1f5f9", lineHeight: 1 }}>
+                <AnimNum target={kpi.val} prefix={kpi.prefix} suffix={kpi.suffix} />
+              </div>
+              <div style={{ fontSize: 11, color: kpi.dColor, marginTop: 6 }}>
+                {kpi.delta} vs last year
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ══════ OVERVIEW TAB ══════ */}
+        {activeTab === "overview" && (
+          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16 }}>
+
+            {/* Revenue trend */}
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                <div>
+                  <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569" }}>REVENUE TREND</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0" }}>Monthly Performance vs Target</div>
+                </div>
+                <div style={{ display: "flex", gap: 16, fontSize: 10, color: "#64748b" }}>
+                  <span><span style={{ color: "#60a5fa" }}>●</span> Revenue</span>
+                  <span><span style={{ color: "#f59e0b" }}>●</span> Target</span>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={260}>
+                <AreaChart data={monthlyRevenue}>
+                  <defs>
+                    <linearGradient id="gradRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor="#2563eb" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="month" stroke="#475569" tick={{ fontSize: 10, fontFamily: "Courier Prime" }} />
+                  <YAxis stroke="#475569" tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area type="monotone" dataKey="revenue" name="Revenue" stroke="#60a5fa" fill="url(#gradRev)" strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey="target" name="Target" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="5 3" dot={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Region pie */}
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 4 }}>GEOGRAPHY</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", marginBottom: 16 }}>Revenue by Region</div>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie data={regionData} cx="50%" cy="50%" innerRadius={50} outerRadius={80}
+                    dataKey="value" paddingAngle={3}>
+                    {regionData.map((d, i) => <Cell key={i} fill={d.color} />)}
+                  </Pie>
+                  <Tooltip formatter={v => `$${v.toLocaleString()}`} contentStyle={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 6 }} />
+                </PieChart>
+              </ResponsiveContainer>
+              {regionData.map((r, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #0f172a" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: r.color, display: "inline-block" }} />
+                    {r.name}
+                  </span>
+                  <span style={{ color: "#94a3b8", fontSize: 12 }}>${(r.value / 1000).toFixed(0)}k</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Units bar */}
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 4 }}>VOLUME</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", marginBottom: 20 }}>Monthly Units Sold</div>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={monthlyRevenue}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="month" stroke="#475569" tick={{ fontSize: 10 }} />
+                  <YAxis stroke="#475569" tick={{ fontSize: 10 }} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="units" name="Units" fill="#34d399" radius={[4,4,0,0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Alerts */}
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 4 }}>INTELLIGENCE</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", marginBottom: 16 }}>AI-Generated Alerts</div>
+              {[
+                { icon: "🟢", color: "#34d399", bg: "rgba(52,211,153,0.08)", msg: "Revenue exceeded target in 10/12 months. Strong growth trajectory.", label: "POSITIVE" },
+                { icon: "🟡", color: "#fbbf24", bg: "rgba(251,191,36,0.08)",  msg: "Avg discount of 7.2% — monitor margin erosion on ProSuite X deals.", label: "WARNING" },
+                { icon: "🔵", color: "#60a5fa", bg: "rgba(96,165,250,0.08)",  msg: "Q4 historically drives +28% revenue. Ensure inventory and rep readiness.", label: "FORECAST" },
+                { icon: "🔴", color: "#f87171", bg: "rgba(248,113,113,0.08)", msg: "East region 18% below Q3 target. Recommend performance review.", label: "ACTION" },
+              ].map((a, i) => (
+                <div key={i} style={{
+                  background: a.bg, borderLeft: `3px solid ${a.color}`,
+                  borderRadius: 6, padding: "10px 14px", marginBottom: 8,
+                }}>
+                  <div style={{ fontSize: 9, letterSpacing: 2, color: a.color, marginBottom: 3 }}>{a.label}</div>
+                  <div style={{ fontSize: 12, color: "#cbd5e1" }}>{a.icon} {a.msg}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ══════ FORECAST TAB ══════ */}
+        {activeTab === "forecast" && (
+          <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", gap: 16 }}>
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+                <div>
+                  <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569" }}>GRADIENT BOOSTING MODEL  ·  R² = 0.921</div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "#e2e8f0" }}>AI Revenue Forecast — Q1 2024</div>
+                </div>
+                <div style={{
+                  background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.3)",
+                  borderRadius: 6, padding: "6px 12px", fontSize: 11, color: "#34d399",
+                }}>
+                  ▲ +15.6% projected growth
+                </div>
+              </div>
+
+              <ResponsiveContainer width="100%" height={320}>
+                <AreaChart data={[
+                  ...monthlyRevenue.slice(-3).map(d => ({ ...d, forecast: null, upper: null, lower: null, label: d.month })),
+                  { label: "Feb '24", actual: null, forecast: 248200, upper: 267900, lower: 228500 },
+                  { label: "Mar '24", actual: null, forecast: 261500, upper: 282400, lower: 240600 },
+                  { label: "Apr '24", actual: null, forecast: 278800, upper: 301100, lower: 256500 },
+                ]}>
+                  <defs>
+                    <linearGradient id="gradActual" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor="#60a5fa" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#60a5fa" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="gradForecast" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor="#34d399" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#34d399" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="label" stroke="#475569" tick={{ fontSize: 10, fontFamily: "Courier Prime" }} />
+                  <YAxis stroke="#475569" tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <ReferenceLine x="Nov" stroke="#475569" strokeDasharray="4 3" label={{ value: "Forecast →", position: "top", fill: "#64748b", fontSize: 10 }} />
+                  <Area type="monotone" dataKey="revenue"  name="Actual"   stroke="#60a5fa" fill="url(#gradActual)"   strokeWidth={2.5} dot={{ r: 4, fill: "#60a5fa" }} connectNulls={false} />
+                  <Area type="monotone" dataKey="forecast" name="Forecast" stroke="#34d399" fill="url(#gradForecast)" strokeWidth={2.5} strokeDasharray="6 3" dot={{ r: 5, fill: "#34d399", strokeWidth: 2, stroke: "#0a1628" }} connectNulls={false} />
+                  <Area type="monotone" dataKey="upper" name="Upper CI" stroke="#34d399" fill="none" strokeWidth={1} strokeDasharray="3 3" opacity={0.4} connectNulls={false} />
+                  <Area type="monotone" dataKey="lower" name="Lower CI" stroke="#34d399" fill="none" strokeWidth={1} strokeDasharray="3 3" opacity={0.4} connectNulls={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div>
+              {/* Model Card */}
+              <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 20, marginBottom: 12 }}>
+                <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 12 }}>MODEL METRICS</div>
+                {[
+                  { label: "Algorithm", val: "Gradient Boosting" },
+                  { label: "Accuracy (R²)", val: "0.921", color: "#34d399" },
+                  { label: "MAE", val: "$4,210", color: "#60a5fa" },
+                  { label: "Train Size", val: "12 months" },
+                  { label: "Features", val: "8 inputs" },
+                ].map((m, i) => (
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "1px solid #0f172a", fontSize: 12 }}>
+                    <span style={{ color: "#64748b" }}>{m.label}</span>
+                    <span style={{ color: m.color || "#e2e8f0", fontWeight: 600 }}>{m.val}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Forecast table */}
+              <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 20 }}>
+                <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 12 }}>90-DAY FORECAST</div>
+                {[
+                  { mo: "Feb 2024", val: 248200, g: "+4.1%" },
+                  { mo: "Mar 2024", val: 261500, g: "+5.4%" },
+                  { mo: "Apr 2024", val: 278800, g: "+6.6%" },
+                ].map((f, i) => (
+                  <div key={i} style={{
+                    background: "rgba(37,99,235,0.06)", border: "1px solid rgba(37,99,235,0.15)",
+                    borderRadius: 8, padding: "12px 14px", marginBottom: 8,
+                  }}>
+                    <div style={{ fontSize: 10, color: "#475569", letterSpacing: 2, marginBottom: 4 }}>{f.mo.toUpperCase()}</div>
+                    <div style={{ fontSize: 20, fontWeight: 800, color: "#60a5fa" }}>${f.val.toLocaleString()}</div>
+                    <div style={{ fontSize: 11, color: "#34d399" }}>{f.g} MoM</div>
+                  </div>
+                ))}
+                <div style={{ marginTop: 12, padding: "10px 0", borderTop: "1px solid #1e293b", display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 11, color: "#64748b" }}>3-Month Total</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: "#34d399" }}>$788,500</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══════ PRODUCTS TAB ══════ */}
+        {activeTab === "products" && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 4 }}>PORTFOLIO</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", marginBottom: 20 }}>Revenue by Product</div>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={productData} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis type="number" stroke="#475569" tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <YAxis type="category" dataKey="name" stroke="#475569" tick={{ fontSize: 11, fontFamily: "Courier Prime" }} width={100} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="revenue" name="Revenue" radius={[0,6,6,0]}>
+                    {productData.map((d, i) => <Cell key={i} fill={d.color} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div>
+              {productData.map((p, i) => (
+                <div key={i} style={{
+                  background: "#0a1628", border: "1px solid #1e293b",
+                  borderRadius: 10, padding: 18, marginBottom: 10,
+                  borderLeft: `3px solid ${p.color}`,
+                  transition: "transform 0.15s",
+                }}
+                  onMouseEnter={e => e.currentTarget.style.transform = "translateX(4px)"}
+                  onMouseLeave={e => e.currentTarget.style.transform = "translateX(0)"}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                    <span style={{ fontWeight: 700, color: "#e2e8f0" }}>{p.name}</span>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: p.color }}>${(p.revenue/1000).toFixed(0)}k</span>
+                  </div>
+                  <div style={{ background: "#050a14", borderRadius: 4, height: 6, overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%", borderRadius: 4,
+                      background: p.color,
+                      width: `${(p.revenue / 412000) * 100}%`,
+                      transition: "width 1s ease",
+                    }} />
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontSize: 11, color: "#64748b" }}>
+                    <span>{p.units.toLocaleString()} units</span>
+                    <span>${(p.revenue / p.units).toFixed(0)} / unit</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ══════ TEAM TAB ══════ */}
+        {activeTab === "team" && (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+              {salespeople.map((sp, i) => {
+                const pct = Math.min((sp.revenue / sp.quota) * 100, 120);
+                const onTrack = sp.revenue >= sp.quota;
+                return (
+                  <div key={i}
+                    style={{
+                      background: hoveredSP === i ? "#0f1e34" : "#0a1628",
+                      border: `1px solid ${hoveredSP === i ? "#2563eb50" : "#1e293b"}`,
+                      borderRadius: 10, padding: 22,
+                      cursor: "pointer", transition: "all 0.2s",
+                    }}
+                    onMouseEnter={() => setHoveredSP(i)}
+                    onMouseLeave={() => setHoveredSP(null)}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14 }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: "#e2e8f0" }}>{sp.name}</div>
+                        <div style={{ fontSize: 10, color: "#475569", letterSpacing: 2, marginTop: 3 }}>
+                          {sp.deals} DEALS CLOSED
+                        </div>
+                      </div>
+                      <div style={{
+                        background: onTrack ? "rgba(52,211,153,0.1)" : "rgba(248,113,113,0.1)",
+                        color: onTrack ? "#34d399" : "#f87171",
+                        border: `1px solid ${onTrack ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`,
+                        borderRadius: 6, padding: "4px 10px", fontSize: 11, fontWeight: 700,
+                        height: "fit-content",
+                      }}>
+                        {sp.trend}
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: 22, fontWeight: 800, color: "#60a5fa", marginBottom: 8 }}>
+                      ${(sp.revenue / 1000).toFixed(0)}k
+                    </div>
+
+                    <div style={{ fontSize: 10, color: "#475569", marginBottom: 6, display: "flex", justifyContent: "space-between" }}>
+                      <span>QUOTA ATTAINMENT</span>
+                      <span style={{ color: onTrack ? "#34d399" : "#f87171" }}>{pct.toFixed(0)}%</span>
+                    </div>
+                    <div style={{ background: "#050a14", borderRadius: 4, height: 8, overflow: "hidden" }}>
+                      <div style={{
+                        height: "100%", borderRadius: 4,
+                        background: onTrack
+                          ? "linear-gradient(90deg, #059669, #34d399)"
+                          : "linear-gradient(90deg, #991b1b, #f87171)",
+                        width: `${Math.min(pct, 100)}%`,
+                        transition: "width 1s ease",
+                      }} />
+                    </div>
+                    <div style={{ fontSize: 10, color: "#475569", marginTop: 6 }}>
+                      Quota: ${(sp.quota / 1000).toFixed(0)}k
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Team bar chart */}
+            <div style={{ background: "#0a1628", border: "1px solid #1e293b", borderRadius: 10, padding: 24, marginTop: 16 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#475569", marginBottom: 4 }}>LEADERBOARD</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", marginBottom: 20 }}>Team Revenue vs Quota</div>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={salespeople}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="name" stroke="#475569" tick={{ fontSize: 9, fontFamily: "Courier Prime" }} />
+                  <YAxis stroke="#475569" tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="revenue" name="Revenue" fill="#60a5fa" radius={[4,4,0,0]} />
+                  <Bar dataKey="quota"   name="Quota"   fill="#f59e0b" radius={[4,4,0,0]} opacity={0.5} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{ textAlign: "center", padding: "20px", color: "#1e293b", fontSize: 10, letterSpacing: 2 }}>
+        SMART SALES FORECASTING SYSTEM  ·  PORTFOLIO PROJECT  ·  BUILT WITH PYTHON + ML
+      </div>
+    </div>
+  );
+}

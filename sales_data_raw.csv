@@ -1,0 +1,136 @@
+Date,Region,Salesperson,Product,Category,Units_Sold,Unit_Price,Discount_%,Revenue,Customer_Segment,Lead_Source,Customer_ID,Returns,Marketing_Spend
+2023-01-03,North,Alice Johnson,ProSuite X,Software,45,299,5,12782.25,Enterprise,LinkedIn,C1021,2,3200
+2023-01-05,South,Bob Martinez,DataPack Basic,Data,120,49,0,5880,SMB,Google Ads,C1045,5,800
+2023-01-07,East,Carol White,CloudStore Pro,Cloud,30,199,10,5373,Mid-Market,Referral,C1033,1,1500
+2023-01-10,West,Dan Lee,ProSuite X,Software,60,299,8,16494.8,Enterprise,Direct,C1067,3,4100
+2023-01-12,North,Alice Johnson,SecurityShield,Security,25,399,0,9975,Enterprise,LinkedIn,C1021,0,2800
+2023-01-15,South,Bob Martinez,CloudStore Pro,Cloud,80,199,5,15124,SMB,Google Ads,C1089,8,1200
+2023-01-18,East,Carol White,DataPack Basic,Data,200,49,15,8330,Mid-Market,Event,C1033,12,600
+2023-01-20,West,Dan Lee,SecurityShield,Security,40,399,0,15960,Enterprise,Direct,C1102,1,3500
+2023-01-22,North,Eve Chen,ProSuite X,Software,55,299,5,15644.75,Enterprise,LinkedIn,C1115,2,3900
+2023-01-25,South,Frank Davis,DataPack Basic,Data,150,49,10,6615,SMB,Google Ads,C1128,7,900
+2023-01-28,East,Carol White,CloudStore Pro,Cloud,35,199,0,6965,Mid-Market,Referral,C1033,2,1800
+2023-02-01,West,Dan Lee,ProSuite X,Software,70,299,8,19249.4,Enterprise,Direct,C1067,4,4800
+2023-02-03,North,Alice Johnson,DataPack Basic,Data,180,49,5,8379,Enterprise,LinkedIn,C1021,6,1100
+2023-02-06,South,Bob Martinez,SecurityShield,Security,20,399,10,7182,SMB,Google Ads,C1045,1,1200
+2023-02-09,East,Eve Chen,ProSuite X,Software,48,299,5,13654.56,Mid-Market,Event,C1141,2,3400
+2023-02-12,West,Frank Davis,CloudStore Pro,Cloud,65,199,0,12935,Enterprise,Direct,C1154,3,2200
+2023-02-15,North,Alice Johnson,SecurityShield,Security,30,399,0,11970,Enterprise,LinkedIn,C1021,0,3100
+2023-02-17,South,Bob Martinez,ProSuite X,Software,55,299,8,15142.9,SMB,Google Ads,C1089,3,3600
+2023-02-20,East,Carol White,DataPack Basic,Data,220,49,15,9163,Mid-Market,Referral,C1033,14,700
+2023-02-22,West,Dan Lee,SecurityShield,Security,50,399,5,18952.5,Enterprise,Direct,C1067,2,4200
+2023-02-25,North,Eve Chen,CloudStore Pro,Cloud,40,199,10,7164,Enterprise,LinkedIn,C1115,1,2000
+2023-02-28,South,Frank Davis,DataPack Basic,Data,160,49,0,7840,SMB,Google Ads,C1128,8,950
+2023-03-02,East,Carol White,ProSuite X,Software,52,299,5,14782.36,Mid-Market,Event,C1033,2,3700
+2023-03-05,West,Dan Lee,CloudStore Pro,Cloud,75,199,8,13731.75,Enterprise,Direct,C1067,4,2500
+2023-03-08,North,Alice Johnson,DataPack Basic,Data,190,49,10,8379,Enterprise,LinkedIn,C1021,9,1050
+2023-03-10,South,Bob Martinez,ProSuite X,Software,60,299,5,17043,SMB,Google Ads,C1045,3,4000
+2023-03-13,East,Eve Chen,SecurityShield,Security,35,399,0,13965,Mid-Market,Referral,C1141,1,2900
+2023-03-15,West,Frank Davis,DataPack Basic,Data,175,49,15,7286.25,Enterprise,Direct,C1154,10,800
+2023-03-18,North,Alice Johnson,ProSuite X,Software,65,299,8,17905.3,Enterprise,LinkedIn,C1021,3,4500
+2023-03-20,South,Bob Martinez,CloudStore Pro,Cloud,90,199,5,17011.5,SMB,Google Ads,C1089,5,2300
+2023-03-22,East,Carol White,SecurityShield,Security,28,399,10,10051.2,Mid-Market,Event,C1033,0,2100
+2023-03-25,West,Dan Lee,ProSuite X,Software,80,299,0,23920,Enterprise,Direct,C1067,4,5200
+2023-03-28,North,Eve Chen,DataPack Basic,Data,210,49,5,9775.5,Enterprise,LinkedIn,C1115,11,1100
+2023-04-01,South,Frank Davis,SecurityShield,Security,22,399,0,8778,SMB,Google Ads,C1128,0,1800
+2023-04-03,East,Carol White,ProSuite X,Software,58,299,5,16489.21,Mid-Market,Referral,C1033,2,4100
+2023-04-06,West,Dan Lee,CloudStore Pro,Cloud,85,199,8,15565.3,Enterprise,Direct,C1067,5,2700
+2023-04-08,North,Alice Johnson,DataPack Basic,Data,200,49,10,8820,Enterprise,LinkedIn,C1021,10,1200
+2023-04-10,South,Bob Martinez,ProSuite X,Software,65,299,5,18455.25,SMB,Google Ads,C1045,3,4300
+2023-04-13,East,Eve Chen,SecurityShield,Security,40,399,0,15960,Mid-Market,Event,C1141,2,3200
+2023-04-15,West,Frank Davis,DataPack Basic,Data,185,49,15,7701.75,Enterprise,Direct,C1154,12,850
+2023-04-18,North,Alice Johnson,ProSuite X,Software,72,299,8,19823.04,Enterprise,LinkedIn,C1021,4,5100
+2023-04-20,South,Bob Martinez,CloudStore Pro,Cloud,100,199,5,18905,SMB,Google Ads,C1089,6,2600
+2023-04-22,East,Carol White,SecurityShield,Security,32,399,10,11484.8,Mid-Market,Referral,C1033,1,2400
+2023-04-25,West,Dan Lee,ProSuite X,Software,88,299,0,26312,Enterprise,Direct,C1067,5,5800
+2023-04-28,North,Eve Chen,DataPack Basic,Data,225,49,5,10473.75,Enterprise,LinkedIn,C1115,13,1300
+2023-05-02,South,Frank Davis,SecurityShield,Security,25,399,0,9975,SMB,Google Ads,C1128,0,2000
+2023-05-05,East,Carol White,ProSuite X,Software,62,299,5,17612.29,Mid-Market,Event,C1033,3,4400
+2023-05-08,West,Dan Lee,CloudStore Pro,Cloud,90,199,8,16484.7,Enterprise,Direct,C1067,5,2900
+2023-05-10,North,Alice Johnson,DataPack Basic,Data,215,49,10,9460.35,Enterprise,LinkedIn,C1021,11,1250
+2023-05-12,South,Bob Martinez,ProSuite X,Software,70,299,5,19866.5,SMB,Google Ads,C1045,4,4600
+2023-05-15,East,Eve Chen,SecurityShield,Security,45,399,0,17955,Mid-Market,Referral,C1141,2,3500
+2023-05-18,West,Frank Davis,DataPack Basic,Data,190,49,15,7910.5,Enterprise,Direct,C1154,13,900
+2023-05-20,North,Alice Johnson,ProSuite X,Software,78,299,8,21481.08,Enterprise,LinkedIn,C1021,4,5600
+2023-05-22,South,Bob Martinez,CloudStore Pro,Cloud,110,199,5,20849.5,SMB,Google Ads,C1089,7,2900
+2023-05-25,East,Carol White,SecurityShield,Security,36,399,10,12916.8,Mid-Market,Event,C1033,1,2700
+2023-05-28,West,Dan Lee,ProSuite X,Software,95,299,0,28405,Enterprise,Direct,C1067,5,6200
+2023-06-01,North,Eve Chen,DataPack Basic,Data,240,49,5,11172,Enterprise,LinkedIn,C1115,14,1450
+2023-06-03,South,Frank Davis,SecurityShield,Security,28,399,0,11172,SMB,Google Ads,C1128,1,2200
+2023-06-06,East,Carol White,ProSuite X,Software,68,299,5,19330.36,Mid-Market,Referral,C1033,3,4900
+2023-06-09,West,Dan Lee,CloudStore Pro,Cloud,95,199,8,17387.65,Enterprise,Direct,C1067,6,3100
+2023-06-12,North,Alice Johnson,DataPack Basic,Data,230,49,10,10122,Enterprise,LinkedIn,C1021,12,1350
+2023-06-15,South,Bob Martinez,ProSuite X,Software,75,299,5,21278.75,SMB,Google Ads,C1045,4,5000
+2023-06-18,East,Eve Chen,SecurityShield,Security,50,399,0,19950,Mid-Market,Event,C1141,3,3900
+2023-06-20,West,Frank Davis,DataPack Basic,Data,200,49,15,8330,Enterprise,Direct,C1154,14,950
+2023-06-22,North,Alice Johnson,ProSuite X,Software,85,299,8,23416.3,Enterprise,LinkedIn,C1021,5,6300
+2023-06-25,South,Bob Martinez,CloudStore Pro,Cloud,120,199,5,22794,SMB,Google Ads,C1089,8,3200
+2023-06-28,East,Carol White,SecurityShield,Security,42,399,10,15085.8,Mid-Market,Referral,C1033,2,3000
+2023-07-01,West,Dan Lee,ProSuite X,Software,102,299,0,30498,Enterprise,Direct,C1067,6,6800
+2023-07-03,North,Eve Chen,DataPack Basic,Data,255,49,5,11868.75,Enterprise,LinkedIn,C1115,15,1550
+2023-07-06,South,Frank Davis,SecurityShield,Security,30,399,0,11970,SMB,Google Ads,C1128,1,2400
+2023-07-09,East,Carol White,ProSuite X,Software,72,299,5,20476.08,Mid-Market,Event,C1033,3,5200
+2023-07-12,West,Dan Lee,CloudStore Pro,Cloud,100,199,8,18308,Enterprise,Direct,C1067,6,3300
+2023-07-15,North,Alice Johnson,DataPack Basic,Data,245,49,10,10791.9,Enterprise,LinkedIn,C1021,13,1450
+2023-07-18,South,Bob Martinez,ProSuite X,Software,80,299,5,22724,SMB,Google Ads,C1045,4,5300
+2023-07-20,East,Eve Chen,SecurityShield,Security,55,399,0,21945,Mid-Market,Referral,C1141,3,4200
+2023-07-22,West,Frank Davis,DataPack Basic,Data,210,49,15,8756.5,Enterprise,Direct,C1154,15,1000
+2023-07-25,North,Alice Johnson,ProSuite X,Software,90,299,8,24793.2,Enterprise,LinkedIn,C1021,5,6700
+2023-07-28,South,Bob Martinez,CloudStore Pro,Cloud,128,199,5,24281.6,SMB,Google Ads,C1089,9,3500
+2023-08-01,East,Carol White,SecurityShield,Security,45,399,10,16159.5,Mid-Market,Event,C1033,2,3300
+2023-08-03,West,Dan Lee,ProSuite X,Software,108,299,0,32292,Enterprise,Direct,C1067,7,7200
+2023-08-06,North,Eve Chen,DataPack Basic,Data,265,49,5,12341.25,Enterprise,LinkedIn,C1115,16,1620
+2023-08-09,South,Frank Davis,SecurityShield,Security,32,399,0,12768,SMB,Google Ads,C1128,1,2600
+2023-08-12,East,Carol White,ProSuite X,Software,76,299,5,21621.56,Mid-Market,Referral,C1033,4,5500
+2023-08-15,West,Dan Lee,CloudStore Pro,Cloud,105,199,8,19223.85,Enterprise,Direct,C1067,7,3500
+2023-08-18,North,Alice Johnson,DataPack Basic,Data,255,49,10,11249.55,Enterprise,LinkedIn,C1021,14,1520
+2023-08-20,South,Bob Martinez,ProSuite X,Software,85,299,5,24176.75,SMB,Google Ads,C1045,5,5700
+2023-08-22,East,Eve Chen,SecurityShield,Security,60,399,0,23940,Mid-Market,Event,C1141,3,4600
+2023-08-25,West,Frank Davis,DataPack Basic,Data,220,49,15,9163,Enterprise,Direct,C1154,16,1050
+2023-08-28,North,Alice Johnson,ProSuite X,Software,96,299,8,26454.72,Enterprise,LinkedIn,C1021,6,7200
+2023-09-01,South,Bob Martinez,CloudStore Pro,Cloud,135,199,5,25533.75,SMB,Google Ads,C1089,10,3800
+2023-09-03,East,Carol White,SecurityShield,Security,48,399,10,17233.2,Mid-Market,Referral,C1033,2,3600
+2023-09-06,West,Dan Lee,ProSuite X,Software,115,299,0,34385,Enterprise,Direct,C1067,7,7700
+2023-09-09,North,Eve Chen,DataPack Basic,Data,275,49,5,12815.625,Enterprise,LinkedIn,C1115,17,1700
+2023-09-12,South,Frank Davis,SecurityShield,Security,34,399,0,13566,SMB,Google Ads,C1128,2,2800
+2023-09-15,East,Carol White,ProSuite X,Software,80,299,5,22756,Mid-Market,Event,C1033,4,5800
+2023-09-18,West,Dan Lee,CloudStore Pro,Cloud,110,199,8,20138.8,Enterprise,Direct,C1067,7,3700
+2023-09-20,North,Alice Johnson,DataPack Basic,Data,268,49,10,11815.56,Enterprise,LinkedIn,C1021,15,1600
+2023-09-22,South,Bob Martinez,ProSuite X,Software,90,299,5,25628.5,SMB,Google Ads,C1045,5,6100
+2023-09-25,East,Eve Chen,SecurityShield,Security,65,399,0,25935,Mid-Market,Referral,C1141,4,5000
+2023-09-28,West,Frank Davis,DataPack Basic,Data,230,49,15,9580.5,Enterprise,Direct,C1154,17,1100
+2023-10-01,North,Alice Johnson,ProSuite X,Software,103,299,8,28385.61,Enterprise,LinkedIn,C1021,6,7800
+2023-10-03,South,Bob Martinez,CloudStore Pro,Cloud,142,199,5,26850.7,SMB,Google Ads,C1089,11,4100
+2023-10-06,East,Carol White,SecurityShield,Security,52,399,10,18673.2,Mid-Market,Event,C1033,3,3900
+2023-10-09,West,Dan Lee,ProSuite X,Software,122,299,0,36478,Enterprise,Direct,C1067,8,8200
+2023-10-12,North,Eve Chen,DataPack Basic,Data,285,49,5,13286.25,Enterprise,LinkedIn,C1115,18,1780
+2023-10-15,South,Frank Davis,SecurityShield,Security,36,399,0,14364,SMB,Google Ads,C1128,2,3000
+2023-10-18,East,Carol White,ProSuite X,Software,84,299,5,23892.84,Mid-Market,Referral,C1033,4,6100
+2023-10-20,West,Dan Lee,CloudStore Pro,Cloud,115,199,8,21054.55,Enterprise,Direct,C1067,8,3900
+2023-10-22,North,Alice Johnson,DataPack Basic,Data,280,49,10,12348,Enterprise,LinkedIn,C1021,16,1680
+2023-10-25,South,Bob Martinez,ProSuite X,Software,95,299,5,27080.25,SMB,Google Ads,C1045,6,6500
+2023-10-28,East,Eve Chen,SecurityShield,Security,70,399,0,27930,Mid-Market,Event,C1141,4,5400
+2023-11-01,West,Frank Davis,DataPack Basic,Data,240,49,15,10004,Enterprise,Direct,C1154,18,1150
+2023-11-03,North,Alice Johnson,ProSuite X,Software,110,299,8,30295.2,Enterprise,LinkedIn,C1021,7,8400
+2023-11-05,South,Bob Martinez,CloudStore Pro,Cloud,150,199,5,28357.5,SMB,Google Ads,C1089,12,4400
+2023-11-08,East,Carol White,SecurityShield,Security,55,399,10,19759.5,Mid-Market,Referral,C1033,3,4200
+2023-11-10,West,Dan Lee,ProSuite X,Software,128,299,0,38272,Enterprise,Direct,C1067,9,8700
+2023-11-12,North,Eve Chen,DataPack Basic,Data,295,49,5,13749.75,Enterprise,LinkedIn,C1115,19,1860
+2023-11-15,South,Frank Davis,SecurityShield,Security,38,399,0,15162,SMB,Google Ads,C1128,2,3200
+2023-11-18,East,Carol White,ProSuite X,Software,88,299,5,25014.36,Mid-Market,Event,C1033,5,6500
+2023-11-20,West,Dan Lee,CloudStore Pro,Cloud,120,199,8,21984,Enterprise,Direct,C1067,8,4100
+2023-11-22,North,Alice Johnson,DataPack Basic,Data,292,49,10,12880.44,Enterprise,LinkedIn,C1021,17,1760
+2023-11-25,South,Bob Martinez,ProSuite X,Software,100,299,5,28405,SMB,Google Ads,C1045,6,6900
+2023-11-28,East,Eve Chen,SecurityShield,Security,75,399,0,29925,Mid-Market,Referral,C1141,4,5800
+2023-12-01,West,Frank Davis,DataPack Basic,Data,250,49,15,10420.5,Enterprise,Direct,C1154,19,1200
+2023-12-03,North,Alice Johnson,ProSuite X,Software,118,299,8,32513.64,Enterprise,LinkedIn,C1021,7,9100
+2023-12-05,South,Bob Martinez,CloudStore Pro,Cloud,158,199,5,29864.9,SMB,Google Ads,C1089,13,4700
+2023-12-08,East,Carol White,SecurityShield,Security,58,399,10,20844.9,Mid-Market,Event,C1033,3,4500
+2023-12-10,West,Dan Lee,ProSuite X,Software,135,299,0,40365,Enterprise,Direct,C1067,9,9200
+2023-12-12,North,Eve Chen,DataPack Basic,Data,308,49,5,14347.8,Enterprise,LinkedIn,C1115,20,1940
+2023-12-15,South,Frank Davis,SecurityShield,Security,42,399,0,16758,SMB,Google Ads,C1128,3,3500
+2023-12-18,East,Carol White,ProSuite X,Software,92,299,5,26135.96,Mid-Market,Referral,C1033,5,6900
+2023-12-20,West,Dan Lee,CloudStore Pro,Cloud,125,199,8,22885,Enterprise,Direct,C1067,9,4300
+2023-12-22,North,Alice Johnson,DataPack Basic,Data,305,49,10,13470.45,Enterprise,LinkedIn,C1021,18,1850
+2023-12-25,South,Bob Martinez,ProSuite X,Software,108,299,5,30717.54,SMB,Google Ads,C1045,7,7400
+2023-12-28,East,Eve Chen,SecurityShield,Security,80,399,0,31920,Mid-Market,Event,C1141,5,6200
