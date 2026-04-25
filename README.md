@@ -267,8 +267,8 @@ Every pipeline event is logged to `audit_trail.json`:
 
 **[Your Name]**
 - Portfolio: [your-portfolio.com](https://your-portfolio.com)
-- LinkedIn: [linkedin.com/in/yourname](https://linkedin.com)
-- GitHub: [github.com/yourusername](https://github.com)
+- LinkedIn: [linkedin.com/in/yourname](https://www.linkedin.com/in/kirthika-rajendran)
+- GitHub: [github.com/yourusername](https://github.com/kiru-builds)
 
 ---
 
@@ -279,3 +279,6 @@ MIT License — free to use for portfolio and learning purposes.
 ---
 
 > ⭐ If this project helped you, please give it a star!
+
+
+🔗 *Live Demo:* [Click here to try the app](https://smart-sales-forecasting-shhyafzqhxfmzakr8hg4qn.streamlit.app/)
