@@ -265,7 +265,7 @@ Every pipeline event is logged to `audit_trail.json`:
 
 ## 👤 Author
 
-**[Your Name]**
+R.Kirthika
 - Portfolio: [your-portfolio.com](https://your-portfolio.com)
 - LinkedIn: [linkedin.com/in/yourname](https://www.linkedin.com/in/kirthika-rajendran)
 - GitHub: [github.com/yourusername](https://github.com/kiru-builds)
