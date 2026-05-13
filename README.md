@@ -27,10 +27,10 @@
 
 ## 📸 Screenshots
 
-| Dashboard | AI Forecast | Sales Team |
-|-----------|-------------|------------|
-| *(screenshot)* | *(screenshot)* | *(screenshot)* |
-
+| Dashboard | AI Forecast | 
+|-----------|-------------|
+| *![Dashboard](sales-dashboard-1.png)*| *![Dashboard](sales-forecast-1.png)*| 
+| *![Dashboard](sales-dashboard-2.png)*| *![Dashboard](sales-forecasting.png)*|
 ---
 ##🔗 *Live Demo:* [Click here to try the app](https://smart-sales-forecasting-shhyafzqhxfmzakr8hg4qn.streamlit.app/)
 
